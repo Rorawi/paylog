@@ -1,7 +1,6 @@
 import { localDateString } from './money.js';
 
 const intervalDays = { daily: 1, weekly: 7, monthly: 30.4375 };
-const periodName = { daily: 'daily', weekly: 'weekly', monthly: 'monthly' };
 
 function dateFromInput(value) {
   if (!value) return null;
@@ -36,12 +35,6 @@ function completedPeriods(startDate, today, frequency) {
   return Math.max(0, months);
 }
 
-function about(value, unit) {
-  const rounded = Math.round(value * 10) / 10;
-  const shown = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
-  return `about ${shown} ${unit}${rounded === 1 ? '' : 's'}`;
-}
-
 function timeline(paymentCount, frequency) {
   const days = paymentCount * intervalDays[frequency];
   if (days >= 365) {
@@ -51,9 +44,13 @@ function timeline(paymentCount, frequency) {
     const parts = [];
     if (years) parts.push(`${years} year${years === 1 ? '' : 's'}`);
     if (months) parts.push(`${months} month${months === 1 ? '' : 's'}`);
-    return `${paymentCount} ${periodName[frequency]} payment${paymentCount === 1 ? '' : 's'} · about ${parts.join(', ')}`;
+    return `About ${parts.join(', ')}`;
   }
-  return `${paymentCount} ${periodName[frequency]} payment${paymentCount === 1 ? '' : 's'} · about ${Math.round(days)} days · ${about(days / 7, 'week')} · ${about(days / 30.4375, 'month')} · ${about(days / 365.25, 'year')}`;
+  const dayCount = Math.round(days);
+  if (frequency === 'daily') return `About ${dayCount} days`;
+  const unit = frequency === 'weekly' ? 'week' : 'month';
+  const unitCount = Math.round(days / (frequency === 'weekly' ? 7 : 30.4375));
+  return `About ${unitCount} ${unit}${unitCount === 1 ? '' : 's'} · about ${dayCount} days`;
 }
 
 /** Shared payoff and expected-finish calculation for agreement forms and saved agreements. */

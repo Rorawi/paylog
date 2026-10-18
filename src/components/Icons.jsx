@@ -10,6 +10,7 @@ const paths = {
   arrow: <><path d="M5 12h14M13 6l6 6-6 6"/></>,
   close: <><path d="m18 6-12 12M6 6l12 12"/></>,
   payment: <><path d="M3 7h18v12H3z"/><path d="M3 11h18M7 15h4"/></>,
+  image: <><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></>,
   earning: <><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>,
   expense: <><path d="M12 3v18M17 8H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>,
   backup: <><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></>,

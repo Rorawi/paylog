@@ -1155,6 +1155,43 @@ body { background: #f6f8f5; }
 .history-proof-tip { align-items: center; }
 .history-proof-tip span { min-width: 0; }
 
+.receipt-optional { color: #718177; font: 400 12px var(--paylog-body); }
+.receipt-dropzone { width: 100%; min-height: 68px; display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px dashed #b8c9bb; border-radius: 12px; background: #f8fbf8; color: #345540; text-align: left; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+.receipt-dropzone:hover, .receipt-dropzone.is-dragging { border-color: #3d8054; background: #eff7f0; }
+.receipt-dropzone:focus-visible, .receipt-thumb-button:focus-visible { outline: 3px solid #67a778; outline-offset: 2px; }
+.receipt-dropzone-icon { width: 40px; height: 40px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 10px; background: #e7f1e8; color: #28653f; }
+.receipt-dropzone > span:last-child, .receipt-selected-info { min-width: 0; display: grid; gap: 3px; }
+.receipt-dropzone strong, .receipt-selected-info strong { color: #354b3b; font: 600 14px var(--paylog-body); overflow-wrap: anywhere; }
+.receipt-dropzone small, .receipt-selected-info > span { color: #64766a; font: 400 12px/1.4 var(--paylog-body); }
+.receipt-upload-error, .receipt-error { display: block; color: #a43732; font: 500 12px/1.4 var(--paylog-body); }
+.receipt-selected { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid #d9e5db; border-radius: 12px; background: #f7faf7; }
+.receipt-selected > img { width: 60px; height: 60px; flex: 0 0 auto; border-radius: 8px; object-fit: cover; }
+.receipt-selected-info { flex: 1; }
+.receipt-selected-info > div { display: flex; flex-wrap: wrap; gap: 0 12px; }
+.receipt-existing { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; min-height: 60px; padding: 8px 10px; border: 1px solid #d9e5db; border-radius: 12px; background: #f7faf7; }
+.receipt-existing .receipt-attachment { margin-right: auto; }
+.receipt-removed-note { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; color: #596a60; font: 400 13px/1.4 var(--paylog-body); }
+.receipt-remove-action { color: #9c413a !important; }
+.receipt-attachment { width: fit-content; max-width: 100%; display: grid; justify-items: start; gap: 4px; }
+.receipt-thumb-button { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 3px 8px 3px 3px; border: 1px solid #dce6dc; border-radius: 9px; background: #fff; color: #2d6744; font: 600 12px var(--paylog-body); cursor: pointer; }
+.receipt-thumbnail, .receipt-thumbnail-placeholder { width: 38px; height: 38px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 6px; background: #edf5ee; color: #2d6744; object-fit: cover; }
+.history-row .receipt-attachment, .activity-row .receipt-attachment { margin-top: 2px; }
+.receipt-viewer-backdrop { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; overflow: auto; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); background: rgba(17, 33, 24, .76); backdrop-filter: blur(3px); animation: fade-in .15s ease-out; }
+.receipt-viewer { width: min(100%, 760px); max-height: 92dvh; display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; border: 1px solid rgba(255,255,255,.5); border-radius: 16px; background: #fff; box-shadow: 0 24px 70px rgba(0,0,0,.3); }
+.receipt-viewer > header { min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 18px; border-bottom: 1px solid #e7ece7; }
+.receipt-viewer h2 { margin: 0; color: #263c2e; font: 700 18px var(--paylog-display); }
+.receipt-viewer > img { width: 100%; max-height: calc(92dvh - 60px); display: block; padding: 12px; background: #f4f6f4; object-fit: contain; }
+.receipt-error { max-width: 230px; font-size: 11px; }
+
+@media print {
+  .receipt-attachment, .receipt-viewer-backdrop { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt-dropzone { transition: none; }
+  .receipt-viewer-backdrop { animation: none; }
+}
+
 .purchase-flip-card { width: 100%; max-width: 533.34px; aspect-ratio: 533.34 / 294; position: relative; display: block; padding: 0; perspective: 1200px; border: 0; border-radius: 22px; background: transparent; cursor: pointer; text-align: left; -webkit-tap-highlight-color: transparent; }
 .purchase-flip-card:focus-visible { outline: 3px solid #67a778; outline-offset: 4px; }
 .purchase-flip-inner { width: 100%; height: 100%; position: absolute; inset: 0; display: block; transform-style: preserve-3d; transition: transform .65s cubic-bezier(.2,.72,.25,1); }
@@ -1389,3 +1426,179 @@ body { background: #f6f8f5; }
 }
 
 @keyframes weekly-cost-sheet-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Money held with another person, kept separate from in-hand cash. */
+.money-held-panel { display: grid; gap: 20px; padding: 24px; border: 1px solid var(--paylog-border, #dfe8df); border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(24, 49, 33, .04); }
+.money-held-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.money-held-heading h2 { margin: 0; color: #263a2e; font: 700 22px/1.2 var(--paylog-display, 'Manrope', sans-serif); }
+.money-held-heading p { margin: 6px 0 0; color: #64736a; font: 400 14px/1.45 var(--paylog-body, sans-serif); }
+.money-held-heading > svg { flex: 0 0 auto; color: var(--green, #176344); }
+.money-held-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.money-held-metrics > div { min-width: 0; display: grid; gap: 7px; padding: 15px 16px; border: 1px solid #e4ebe4; border-radius: 13px; background: #f9fbf8; }
+.money-held-metrics span { color: #5c6c61; font: 500 13px/1.3 var(--paylog-body, sans-serif); }
+.money-held-metrics strong { overflow-wrap: anywhere; color: #24392d; font: 700 clamp(19px, 2vw, 25px)/1.15 var(--paylog-display, 'Manrope', sans-serif); font-variant-numeric: tabular-nums; }
+.money-held-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.money-held-actions .button { min-height: 46px; }
+.money-held-history { display: grid; gap: 6px; padding-top: 15px; border-top: 1px solid #e9eee9; }
+.money-held-history h3 { margin: 0 0 3px; color: #34453a; font: 700 16px/1.3 var(--paylog-display, 'Manrope', sans-serif); }
+.money-held-row { min-width: 0; display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 9px 0; border-bottom: 1px solid #f0f3ef; }
+.money-held-row:last-child { border-bottom: 0; }
+.money-held-row-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: #f7eee8; color: #956347; }
+.money-held-row-icon.is-in { background: #eaf4ec; color: #39764e; }
+.money-held-row > div { min-width: 0; display: grid; gap: 4px; }
+.money-held-row strong { overflow-wrap: anywhere; color: #35463b; font: 600 14px/1.3 var(--paylog-body, sans-serif); }
+.money-held-row small { color: #66756b; font: 400 12px/1.4 var(--paylog-body, sans-serif); }
+.money-held-row > b { color: #536357; font: 700 14px/1.2 var(--paylog-display, 'Manrope', sans-serif); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.money-held-row > b.is-positive { color: #2f7449; }
+.money-held-empty { margin: 0; color: #64736a; font: 400 14px/1.5 var(--paylog-body, sans-serif); }
+.money-held-history-toggle { justify-self: start; min-height: 40px; padding: 5px 4px; font-size: 13px; }
+.owner-payment-sources { display: grid; gap: 7px; padding: 11px 12px; border-radius: 11px; background: #f5f8f4; }
+.owner-payment-sources > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #5d6c62; font: 400 13px/1.35 var(--paylog-body, sans-serif); }
+.owner-payment-sources b { color: #33473a; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.overview-owner-reserve > small.owner-payment-overdue { color: #94621e; font-weight: 700; }
+.held-payment-error { border-color: #edc7bb !important; background: #fff7f4 !important; color: #8c4939 !important; }
+.held-money-limit { margin: -3px 0 0; color: #617168; font: 400 13px/1.45 var(--paylog-body, sans-serif); }
+.held-money-limit.is-invalid { color: #a24b3b; }
+.held-money-context { padding: 12px 13px; border-radius: 10px; background: #f3f7f2; color: #58695e; font-size: 14px; }
+.held-money-context strong { color: #253a2d; }
+.held-money-modal { width: min(100%, 520px); }
+.held-mode-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 640px) {
+  .money-held-panel { gap: 16px; padding: 18px; border-radius: 16px; }
+  .money-held-heading h2 { font-size: 20px; }
+  .money-held-heading p { max-width: 280px; font-size: 13px; }
+  .money-held-metrics { grid-template-columns: 1fr; gap: 8px; }
+  .money-held-metrics > div { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 11px 12px; }
+  .money-held-metrics span { font-size: 13px; }
+  .money-held-metrics strong { font-size: 19px; text-align: right; }
+  .money-held-actions { display: grid; grid-template-columns: 1fr; }
+  .money-held-actions .button { width: 100%; min-height: 46px; }
+  .money-held-row { grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; }
+  .money-held-row strong { font-size: 13px; }
+  .money-held-row small { font-size: 11px; }
+  .money-held-row > b { font-size: 12px; }
+  .owner-payment-sources > div { align-items: flex-start; font-size: 12px; }
+}
+
+/* Work and Pay vehicle experience */
+.agreement-form-section-title { display: grid; gap: 4px; margin-top: 5px; padding-top: 7px; }
+.agreement-form-section-title h3 { margin: 0; color: #2b4033; font: 700 17px/1.25 var(--paylog-display, sans-serif); }
+.agreement-form-section-title p { margin: 0; color: #68776d; font: 400 13px/1.45 var(--paylog-body, sans-serif); }
+.vehicle-registration { color: #c5ddcc; font: 500 10px/1.2 var(--paylog-body, sans-serif); letter-spacing: .04em; }
+.vehicle-balance-note { max-width: 533px; margin: -13px 0 0; color: #67776c; font: 400 12px/1.45 var(--paylog-body, sans-serif); }
+.overview-work-week { align-content: start; gap: 12px; border-color: #dce8dc; background: #fff; }
+.overview-work-week h3 { margin: 0; color: #2b4033; font: 700 19px/1.25 var(--paylog-display, sans-serif); }
+.work-week-figures { display: grid; gap: 10px; }
+.work-week-figures > div { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 9px; border-bottom: 1px solid #edf1ed; }
+.work-week-figures span { color: #596b60; font: 400 14px/1.4 var(--paylog-body, sans-serif); }
+.work-week-figures b { color: #283d30; font: 700 17px/1.3 var(--paylog-display, sans-serif); font-variant-numeric: tabular-nums; text-align: right; }
+.work-week-figures .work-week-takehome { padding: 10px 11px; border: 0; border-radius: 11px; background: #edf6ee; }
+.work-week-figures .work-week-takehome span, .work-week-figures .work-week-takehome b { color: #27623c; font-weight: 700; }
+.overview-work-week > p { margin: 0; color: #68776d; font: 400 13px/1.45 var(--paylog-body, sans-serif); }
+.overview-work-week > small { color: #68776d; font: 400 12px/1.45 var(--paylog-body, sans-serif); }
+.overview-owner-reserve > strong { color: #263a2e; }
+.overview-owner-reserve .owner-reserve-action { width: 100%; justify-content: center; }
+.payment-history-row .vehicle-registration { color: inherit; }
+
+@media (max-width: 560px) {
+  .overview-page .overview-section-heading h2 { font-size: 20px; }
+  .overview-work-week { padding: 17px; }
+  .work-week-figures { gap: 8px; }
+  .work-week-figures span { font-size: 13px; }
+  .work-week-figures b { font-size: 16px; }
+  .purchase-flip-card { min-height: 248px; aspect-ratio: 1.38; }
+  .purchase-flip-face { justify-content: space-between; gap: 8px; padding: 15px 16px; }
+  .purchase-front-footer { gap: 7px 10px; }
+  .purchase-front-footer .purchase-reserve-cell { padding-top: 5px; border-top: 1px solid rgba(255,255,255,.14); }
+  .purchase-front-footer .purchase-reserve-cell > small { display: block; grid-column: 1 / -1; color: #c0dac8; font-size: 9px; }
+  .purchase-front-footer > span:not(.purchase-flip-hint) { font-size: 10px; }
+  .purchase-front-footer b { font-size: 12px; }
+  .overview-actions.overview-card-actions { gap: 8px; }
+  .overview-entry-actions { width: 100%; }
+  .overview-entry-actions .button { width: 100%; }
+  .overview-card-actions > .button { flex: 1 1 calc(50% - 5px); padding-inline: 10px; font-size: 12px; }
+  .vehicle-balance-note { margin-top: -8px; font-size: 11px; }
+}
+
+@media print {
+  .print-exclude { display: none !important; }
+}
+
+.agreement-review-modal { width: min(100%, 700px); }
+.agreement-review-modal > form { min-height: 0; max-height: inherit; display: flex; flex-direction: column; }
+.agreement-review-content { min-height: 0; display: grid; gap: 16px; overflow: auto; padding: 19px 23px; }
+.agreement-review-payment { display: grid; gap: 14px; }
+.agreement-review-price { display: grid; gap: 5px; padding: 17px 19px; border-radius: 13px; background: linear-gradient(120deg, #123f2f, #236947); color: #fff; }
+.agreement-review-price span { color: #d1e3d6; font: 500 14px/1.35 var(--paylog-body, sans-serif); }
+.agreement-review-price strong { overflow-wrap: anywhere; font: 800 34px/1.12 var(--paylog-display, sans-serif); font-variant-numeric: tabular-nums; }
+.agreement-review-vehicle { color: #68776d; font: 400 14px/1.45 var(--paylog-body, sans-serif); }
+.agreement-review-vehicle strong { color: #33493a; font-weight: 700; }
+.agreement-review-terms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.agreement-review-terms > div { min-width: 0; display: grid; gap: 5px; padding: 11px 12px; border: 1px solid #e5ebe4; border-radius: 10px; }
+.agreement-review-terms span, .agreement-review-payoff > span { color: #68776d; font: 500 12px/1.35 var(--paylog-body, sans-serif); }
+.agreement-review-terms strong { color: #293e31; font: 700 16px/1.3 var(--paylog-display, sans-serif); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.agreement-review-payoff { display: grid; gap: 4px; padding: 11px 13px; border-radius: 10px; background: #f2f7f1; }
+.agreement-review-payoff strong { color: #2e583c; font: 700 15px/1.35 var(--paylog-display, sans-serif); }
+.agreement-review-payoff small { color: #66776b; font: 400 13px/1.4 var(--paylog-body, sans-serif); }
+.agreement-review-work { display: grid; gap: 10px; }
+.agreement-review-section-heading h3 { margin: 0; color: #2b4033; font: 700 20px/1.25 var(--paylog-display, sans-serif); }
+.agreement-review-section-heading p { margin: 4px 0 0; color: #68776d; font: 400 13px/1.45 var(--paylog-body, sans-serif); }
+.agreement-review-work .income-plan-summary { gap: 10px; padding: 15px; }
+.agreement-review-modal .form-footer { flex: 0 0 auto; background: #fff; }
+
+/* Make the next owner payment reserve visible as progress, not just a balance. */
+.owner-payment-progress { display: grid; gap: 10px; margin-top: 6px; padding: 14px; border: 1px solid #dce9dc; border-radius: 13px; background: #f2f8f2; }
+.owner-payment-progress-heading { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 8px 12px; }
+.owner-payment-progress-heading > span { color: #415b49; font: 600 14px/1.35 var(--paylog-body, sans-serif); }
+.owner-payment-progress-heading > strong { color: #205c38; font: 700 16px/1.25 var(--paylog-display, sans-serif); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.owner-payment-progress-heading > strong small { color: #637568; font: 500 12px/1.25 var(--paylog-body, sans-serif); }
+.owner-payment-progress-track { height: 11px; overflow: hidden; border-radius: 999px; background: #dce8de; box-shadow: inset 0 1px 2px rgba(25, 58, 37, .08); }
+.owner-payment-progress-track > span { display: block; height: 100%; min-width: 0; border-radius: inherit; background: linear-gradient(90deg, #347c4e, #1f6340); transition: width 220ms ease; }
+.owner-payment-progress > p { margin: -2px 0 0; color: #576c5c; font: 500 13px/1.45 var(--paylog-body, sans-serif); }
+.owner-payment-progress > p.owner-payment-progress-ready { color: #22613a; font-weight: 700; }
+.owner-payment-extra { color: #50665a !important; }
+
+@media (max-width: 640px) {
+  .agreement-review-content { gap: 13px; padding: 15px 17px; }
+  .agreement-review-price { padding: 15px 16px; }
+  .agreement-review-price strong { font-size: 29px; }
+  .agreement-review-terms > div { padding: 9px 10px; }
+  .agreement-review-terms strong { font-size: 14px; }
+  .agreement-review-modal .form-footer { position: sticky; bottom: 0; padding: 12px 17px max(15px, env(safe-area-inset-bottom)); }
+  .owner-payment-progress { gap: 9px; padding: 12px; }
+  .owner-payment-progress-heading { align-items: flex-start; }
+  .owner-payment-progress-heading > span { max-width: 44%; font-size: 13px; }
+  .owner-payment-progress-heading > strong { font-size: 14px; }
+  .owner-payment-progress-heading > strong small { font-size: 11px; }
+  .owner-payment-progress > p { font-size: 12px; }
+}
+
+/* Overview finance cards stay top-aligned and readable when they stack on phones. */
+.overview-cash-summary-grid { align-items: start; }
+.overview-cash-card { align-content: start; }
+.overview-owner-reserve { gap: 10px; }
+.owner-payment-progress-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 4px 12px; }
+.owner-payment-progress-heading > span { max-width: none; }
+.owner-payment-sources { gap: 6px; }
+.work-week-empty { margin: 0; padding: 12px 13px; border-radius: 11px; background: #f5f8f4; color: #596b60; font: 400 14px/1.45 var(--paylog-body, sans-serif); }
+
+@media (max-width: 800px) {
+  .overview-cash-summary-grid { grid-template-columns: minmax(0, 1fr); gap: 11px; }
+  .overview-cash-card { gap: 9px; }
+}
+
+@media (max-width: 560px) {
+  .overview-cash-summary-grid { gap: 10px; }
+  .overview-cash-card { padding: 16px; border-radius: 15px; }
+  .overview-cash-card > span { font-size: 14px; }
+  .overview-cash-card > strong { font-size: 26px; }
+  .overview-owner-reserve { gap: 9px; }
+  .owner-payment-progress { margin-top: 3px; }
+  .owner-payment-progress-heading { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 2px; }
+  .owner-payment-progress-heading > span { font-size: 13px; }
+  .owner-payment-progress-heading > strong { text-align: left; font-size: 15px; }
+  .owner-payment-progress-heading > strong small { font-size: 12px; }
+  .owner-payment-progress > p { font-size: 13px; }
+  .work-week-empty { padding: 11px 12px; font-size: 13px; }
+}
