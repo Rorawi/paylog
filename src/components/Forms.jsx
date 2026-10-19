@@ -376,7 +376,7 @@ export function AgreementForm({ agreement, data, onClose, onSave }) {
         <div className="agreement-form-section-title"><h3>Vehicle details</h3><p>Details about the vehicle and its owner.</p></div>
         <div className="form-grid">
           <Field label="Vehicle make and model"><input autoFocus required value={form.item} onChange={(event) => set('item', event.target.value)} placeholder="e.g. Toyota Corolla" /></Field>
-          <Field label="Vehicle registration (optional)"><input autoComplete="off" maxLength="24" value={form.vehicleRegistrationNumber} onChange={(event) => set('vehicleRegistrationNumber', event.target.value)} placeholder="e.g. GR 1234-26" /></Field>
+          <Field label="Vehicle registration "><input autoComplete="off" maxLength="24" value={form.vehicleRegistrationNumber} onChange={(event) => set('vehicleRegistrationNumber', event.target.value)} placeholder="e.g. GR 1234-26" /></Field>
           <Field label="Vehicle owner"><input required value={form.payee} onChange={(event) => set('payee', event.target.value)} placeholder="Owner’s name" /></Field>
         </div>
 

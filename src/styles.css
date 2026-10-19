@@ -7475,3 +7475,92 @@ body {
     font-size: 13px;
   }
 }
+
+.refresh-button {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 11px;
+  border: 1px solid var(--paylog-border, #dce5dd);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--green, #174a38);
+  font: 500 13px var(--paylog-body);
+  cursor: pointer;
+}
+.refresh-button:hover:not(:disabled) {
+  background: #f2f7f2;
+}
+.refresh-button:focus-visible {
+  outline: 3px solid rgba(44, 125, 88, 0.27);
+  outline-offset: 2px;
+}
+.refresh-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+.pull-refresh-indicator {
+  position: fixed;
+  z-index: 30;
+  top: calc(70px + env(safe-area-inset-top));
+  left: 50%;
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 16px;
+  border: 1px solid #dce7df;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(25, 55, 38, 0.14);
+  color: #174a38;
+  font: 600 13px var(--paylog-body);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -8px);
+  transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+.pull-refresh-indicator.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.pull-refresh-indicator.is-ready {
+  border-color: #174a38;
+  background: #174a38;
+  color: #fff;
+}
+.refresh-spin {
+  animation: paylog-refresh-spin 0.8s linear infinite;
+}
+@keyframes paylog-refresh-spin {
+  to { transform: rotate(360deg); }
+}
+@media (max-width: 800px) {
+  .topbar-right {
+    min-width: 0;
+    gap: 8px;
+  }
+  .refresh-button {
+    width: 44px;
+    padding: 0;
+  }
+  .refresh-button > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .refresh-spin,
+  .pull-refresh-indicator {
+    animation: none;
+    transition: none;
+  }
+}

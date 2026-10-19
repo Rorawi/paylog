@@ -598,6 +598,8 @@ function RecordsPage({ data, totals, onAction, onEdit, onDelete, onPayment, onEd
 export default function App() {
   const [data, setData] = useState(emptyData);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
   const [storageError, setStorageError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
   const [resettingTestData, setResettingTestData] = useState(false);
@@ -605,6 +607,10 @@ export default function App() {
   const [selectedAgreementId, setSelectedAgreementId] = useState('');
   const [modal, setModal] = useState(null);
   const [toast, setToast] = useState('');
+  const pullGestureRef = useRef({ active: false, startX: 0, startY: 0, distance: 0 });
+  const pullRefreshAllowedRef = useRef(false);
+  const refreshActionRef = useRef(null);
+  pullRefreshAllowedRef.current = !loading && !refreshing && !modal;
   const totals = useMemo(() => dashboardTotals(data), [data]);
 
   useEffect(() => {
@@ -631,6 +637,71 @@ export default function App() {
       return false;
     }
   }
+
+  async function refreshData() {
+    if (loading || refreshing) return;
+    setRefreshing(true);
+    try {
+      const latest = await repository.load();
+      setData(latest);
+      setStorageError('');
+      setToast('Paylog is up to date.');
+    } catch {
+      setToast('Could not refresh. Check your internet connection.');
+    } finally {
+      setRefreshing(false);
+      window.setTimeout(() => setToast(''), 3200);
+    }
+  }
+
+  refreshActionRef.current = refreshData;
+
+  useEffect(() => {
+    const cancelPull = () => {
+      pullGestureRef.current.active = false;
+      pullGestureRef.current.distance = 0;
+      setPullDistance(0);
+    };
+    const onTouchStart = (event) => {
+      if (!pullRefreshAllowedRef.current || window.scrollY > 1 || event.touches.length !== 1) return;
+      if (event.target instanceof Element && event.target.closest('button, input, textarea, select, a, [role="dialog"], .modal-overlay')) return;
+      const touch = event.touches[0];
+      pullGestureRef.current = { active: true, startX: touch.clientX, startY: touch.clientY, distance: 0 };
+    };
+    const onTouchMove = (event) => {
+      const gesture = pullGestureRef.current;
+      if (!gesture.active) return;
+      if (event.touches.length !== 1) {
+        cancelPull();
+        return;
+      }
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - gesture.startX;
+      const deltaY = touch.clientY - gesture.startY;
+      if (deltaY < 0 || Math.abs(deltaX) > Math.abs(deltaY)) {
+        cancelPull();
+        return;
+      }
+      gesture.distance = Math.min(deltaY, 112);
+      setPullDistance(gesture.distance);
+      event.preventDefault();
+    };
+    const onTouchEnd = () => {
+      const shouldRefresh = pullGestureRef.current.active && pullGestureRef.current.distance >= 78;
+      cancelPull();
+      if (shouldRefresh) refreshActionRef.current?.();
+    };
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', cancelPull, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+      document.removeEventListener('touchcancel', cancelPull);
+    };
+  }, []);
 
   async function resetTestData() {
     if (!import.meta.env.DEV || loading || storageError || resettingTestData) return;
@@ -851,8 +922,9 @@ export default function App() {
       <PaymentHistoryPage data={data} totals={totals} agreements={data.agreements} onPayment={recordPaymentFor} onEditPayment={editActivity} onDeletePayment={deleteActivity} />;
 
   return <div className="app-shell">
+    {(pullDistance > 0 || refreshing) && <div className={`pull-refresh-indicator is-visible ${pullDistance >= 78 ? 'is-ready' : ''} ${refreshing ? 'is-refreshing' : ''}`} role="status" aria-live="polite" aria-busy={refreshing}><Icon name="refresh" size={17} className={refreshing ? 'refresh-spin' : ''}/><span>{refreshing ? 'Refreshing Paylog…' : pullDistance >= 78 ? 'Release to refresh' : 'Pull to refresh'}</span></div>}
     <div className="app-main">
-      <header className="topbar"><div className="brand"><span className="brand-mark"><span /></span><span>paylog<small>Pay it off. Keep your profit.</small></span></div><nav className="desktop-nav" aria-label="Main navigation">{navItems.map((item) => <NavLink key={item.id} item={item} active={activePage === item.id} onClick={() => goto(item.id)} />)}</nav><div className="topbar-right"><span className="saved-indicator"><i />{loading ? 'Connecting' : storageError ? 'Supabase offline' : 'Saved'}</span></div></header>
+      <header className="topbar"><div className="brand"><span className="brand-mark"><span /></span><span>paylog<small>Pay it off. Keep your profit.</small></span></div><nav className="desktop-nav" aria-label="Main navigation">{navItems.map((item) => <NavLink key={item.id} item={item} active={activePage === item.id} onClick={() => goto(item.id)} />)}</nav><div className="topbar-right"><button className="refresh-button" type="button" onClick={refreshData} disabled={loading || refreshing} aria-label={refreshing ? 'Refreshing Paylog' : 'Refresh Paylog'} title="Refresh Paylog"><Icon name="refresh" size={18} className={refreshing ? 'refresh-spin' : ''}/><span>{refreshing ? 'Refreshing' : 'Refresh'}</span></button><span className="saved-indicator"><i />{loading ? 'Connecting' : refreshing ? 'Refreshing' : storageError ? 'Supabase offline' : 'Saved'}</span></div></header>
       <main className="main-content">{loading ? <div className="panel connection-message">Connecting to Paylog…</div> : storageError ? <div className="panel connection-message"><strong>{storageError.startsWith('Anonymous sign-ins are disabled') ? 'One Supabase setting is off' : 'Can’t reach Supabase'}</strong><p>{storageError}</p><button className="button button-primary" type="button" onClick={() => setReloadKey((value) => value + 1)}>Try again</button></div> : pageContent}<footer className="app-footer"><span>Paylog · Your Work and Pay records.</span><span>{formatMoney(totalPaidAll)} recorded toward tracked vehicles</span>{import.meta.env.DEV && !loading && !storageError && <button className="dev-reset-button" type="button" onClick={resetTestData} disabled={resettingTestData}>{resettingTestData ? 'Clearing…' : 'Reset test data'}</button>}</footer></main>
     </div>
     <nav className="mobile-nav" aria-label="Main navigation">{navItems.map((item) => <NavLink key={item.id} item={item} active={activePage === item.id} compact onClick={() => goto(item.id)} />)}</nav>
