@@ -229,7 +229,7 @@ function WeeklyCostSheet({ cost, initialName, costs, onClose, onSave, onRemove }
         </div>
         <footer className={`weekly-cost-sheet-footer ${cost ? 'weekly-cost-sheet-footer-edit' : ''}`}>
           {cost && <button className="button weekly-cost-remove" type="button" onClick={() => onRemove(cost.id)}>Remove</button>}
-          <button className="button button-quiet" type="button" onClick={onClose}>Cancel</button>
+          <button className="button button-outline" type="button" onClick={onClose}>Cancel</button>
           <button className="button button-primary" type="submit" disabled={!canSave}>{cost ? 'Save cost' : 'Add cost'}</button>
         </footer>
       </form>
@@ -369,7 +369,7 @@ export function AgreementForm({ agreement, data, onClose, onSave }) {
     </section></div>;
   }
 
-  return <><div className="modal-backdrop"><section className="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="agreement-form-title">
+  return <><div className="modal-backdrop"><section className="modal-card modal-card-wide agreement-setup-modal" role="dialog" aria-modal="true" aria-labelledby="agreement-form-title">
     <form onSubmit={submit}>
       <FormHeader eyebrow={agreement ? 'Update vehicle plan' : 'New vehicle plan'} title={agreement ? 'Edit your vehicle plan' : 'Set up your vehicle plan'} titleId="agreement-form-title" onClose={onClose}/>
       <div className="form-body">
@@ -575,7 +575,7 @@ export function EarningForm({ earning, data, initialAgreementId, onClose, onSave
       {!embedded && <FormHeader eyebrow={earning ? 'Edit work record' : 'Daily work income'} title={earning ? 'Update work record' : 'Record daily sales or earnings'} onClose={onClose}/>}
       <div className="form-body">
         <Field label={`Daily ${linkedAgreement?.incomeType === 'sales' ? 'sales' : 'earnings'}`} hint="Enter the money from one day of work. Paylog suggests the agreed split."><div className="input-currency input-currency-large"><span>GH₵</span><input autoFocus={!embedded || active} required min="0.01" step="0.01" type="number" inputMode="decimal" value={form.totalAmount} onChange={(event) => setTotal(event.target.value)} placeholder="0.00" /></div></Field>
-        <div className="form-grid">
+        <div className="form-grid earning-datetime-grid">
           <Field label="Date earned"><input required type="date" value={form.date} onChange={(event) => setForm((current) => ({ ...current, date: event.target.value }))} /></Field>
           <Field label="Time earned"><input type="time" value={form.time} onChange={(event) => setForm((current) => ({ ...current, time: event.target.value }))} /></Field>
         </div>
