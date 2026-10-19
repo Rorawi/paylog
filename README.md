@@ -27,6 +27,12 @@ npm run build
 npm run preview
 ```
 
+## Install Paylog
+
+Paylog is a Progressive Web App. Deploy it over HTTPS, then use your browser's **Install app** option on desktop or Android. On iPhone, open Paylog in Safari, tap **Share**, then **Add to Home Screen**. For a local desktop check, use the production preview above at the localhost address Vite prints; the development server does not register the service worker.
+
+The app shell and built assets are cached so Paylog can open offline after it has loaded once. Supabase records, sign-in, and receipt images still need an internet connection.
+
 ## Data and accounts
 
 Paylog creates a Supabase anonymous Auth user and saves one JSON payload per `auth.uid()` in `public.paylog_data`. The table’s RLS policies keep rows isolated between users. Payment receipt files are stored in the private `payment-receipts` bucket under a user-specific folder; the payment record keeps the file path, and Paylog creates a short-lived private link when someone views it. The Supabase JS client is the only data access implementation in `src/data/repository.js`, so a future account-linking flow can keep using the same records.

@@ -159,6 +159,11 @@ export const repository = {
     return normalizeState(saved.payload);
   },
 
+  async resetCurrentUserData() {
+    // `save` resolves the active Supabase user and upserts only that user's row.
+    return this.save(emptyState());
+  },
+
   parseBackup(text) {
     return normalizeState(JSON.parse(text));
   },

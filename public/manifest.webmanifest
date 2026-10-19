@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "Paylog — Your money, in order",
+  "short_name": "Paylog",
+  "description": "Track what you owe, earn, keep, and spend.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f7f7f2",
+  "theme_color": "#f7f7f2",
+  "icons": [
+    {
+      "src": "/icons/paylog-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/paylog-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/paylog-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
